@@ -2,7 +2,10 @@ module github.com/mharner33/guitar-chat
 
 go 1.26.2
 
-require github.com/jackc/pgx/v5 v5.11.0
+require (
+	github.com/go-chi/chi/v5 v5.3.2
+	github.com/jackc/pgx/v5 v5.11.0
+)
 
 require (
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
