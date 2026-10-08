@@ -1,9 +1,17 @@
-# docker compose up --build runs the whole demo: Postgres (pgvector), the app,
-# and a one-shot ingest that populates the corpus after the database is healthy.
-# The app applies migrations at startup, so it waits only on the db healthcheck.
+# docker compose up --build runs the app and a one-shot ingest against the
+# database named by DATABASE_URL in .env (e.g. Supabase). Both binaries apply
+# migrations at startup.
+#
+# For a fully local database instead of Supabase, start the bundled pgvector
+# service with its profile and point DATABASE_URL at it:
+#   docker compose --profile local up --build db
+#   DATABASE_URL=postgres://app:app@db:5432/theory?sslmode=disable (on app/ingest)
 
 services:
+  # Local pgvector Postgres. Not started by default — enable with --profile local
+  # when you want to run against a local DB instead of Supabase.
   db:
+    profiles: ["local"]
     image: pgvector/pgvector:pg16
     environment:
       POSTGRES_USER: app
@@ -24,14 +32,10 @@ services:
       context: .
     env_file: .env
     environment:
-      # Override the DSN to reach the db service on the compose network.
-      DATABASE_URL: postgres://app:app@db:5432/theory?sslmode=disable
+      # DATABASE_URL comes from .env (Supabase). HTTP_ADDR is fixed for the container.
       HTTP_ADDR: ":8080"
     ports:
       - "8080:8080"
-    depends_on:
-      db:
-        condition: service_healthy
 
   # One-shot: chunk + embed the corpus into pgvector, then exit.
   ingest:
@@ -39,11 +43,6 @@ services:
       context: .
     entrypoint: ["/app/ingest"]
     env_file: .env
-    environment:
-      DATABASE_URL: postgres://app:app@db:5432/theory?sslmode=disable
-    depends_on:
-      db:
-        condition: service_healthy
     restart: "no"
 
 volumes:
