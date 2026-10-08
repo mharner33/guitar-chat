@@ -13,7 +13,19 @@ function getRecent() {
   try { return JSON.parse(localStorage.getItem(RECENT_KEY)) || []; }
   catch { return []; }
 }
-function setRecent(list) { localStorage.setItem(RECENT_KEY, JSON.stringify(list)); }
+function setRecent(list) {
+  try { localStorage.setItem(RECENT_KEY, JSON.stringify(list)); }
+  catch (err) { console.warn("could not save recent queries:", err); }
+}
+
+function getConversationId() {
+  try { return localStorage.getItem(CONV_KEY) || null; }
+  catch (err) { console.warn("could not read conversation id:", err); return null; }
+}
+function setConversationId(id) {
+  try { localStorage.setItem(CONV_KEY, id); }
+  catch (err) { console.warn("could not save conversation id:", err); }
+}
 
 function pushRecent(q) {
   let list = getRecent().filter((x) => x !== q);
@@ -74,16 +86,22 @@ form.addEventListener("submit", async (e) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        conversation_id: localStorage.getItem(CONV_KEY) || null,
+        conversation_id: getConversationId(),
         question,
       }),
     });
-    const data = await res.json();
+    let data = null;
+    try { data = await res.json(); }
+    catch { data = null; }
     if (!res.ok) {
-      addMessage("error", (data.error && data.error.message) || "Request failed");
+      addMessage("error", (data && data.error && data.error.message) || ("HTTP " + res.status));
       return;
     }
-    if (data.conversation_id) localStorage.setItem(CONV_KEY, data.conversation_id);
+    if (!data || typeof data !== "object") {
+      addMessage("error", "Invalid response from server");
+      return;
+    }
+    if (data.conversation_id) setConversationId(data.conversation_id);
     addMessage("assistant", data.answer, data.sources);
   } catch (err) {
     addMessage("error", "Network error: " + err.message);
