@@ -27,7 +27,7 @@ func main() {
 	slog.SetDefault(logger)
 
 	if err := run(); err != nil {
-		slog.Error("startup failed", "err", err)
+		slog.Error("api exited with error", "err", err)
 		os.Exit(1)
 	}
 }
@@ -47,20 +47,26 @@ func run() error {
 		"observability_enabled", cfg.ObservabilityEnabled(),
 	)
 
-	st, err := store.Open(ctx, cfg.DatabaseURL)
+	// Startup DB work runs under a deadline. The pool's lifetime is not tied to
+	// this context: pgxpool.New uses ctx only for the initial connect.
+	startCtx, cancelStart := context.WithTimeout(ctx, 30*time.Second)
+	defer cancelStart()
+
+	st, err := store.Open(startCtx, cfg.DatabaseURL)
 	if err != nil {
 		return err
 	}
 	defer st.Close()
 
-	if err := st.Migrate(ctx, migrations.FS); err != nil {
+	if err := st.Migrate(startCtx, migrations.FS); err != nil {
 		return err
 	}
 	slog.Info("migrations applied")
 
-	if err := st.CheckEmbeddingDimensions(ctx, cfg.EmbeddingDimensions); err != nil {
+	if err := st.CheckEmbeddingDimensions(startCtx, cfg.EmbeddingDimensions); err != nil {
 		return err
 	}
+	cancelStart()
 	slog.Info("embedding dimensions verified", "dimensions", cfg.EmbeddingDimensions)
 
 	srv := &http.Server{
