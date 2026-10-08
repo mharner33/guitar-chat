@@ -111,6 +111,13 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
+input.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" && !e.shiftKey && !e.isComposing) {
+    e.preventDefault();
+    form.requestSubmit();
+  }
+});
+
 clearBtn.addEventListener("click", () => { setRecent([]); renderRecent(); });
 
 renderRecent();
