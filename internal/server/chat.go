@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"regexp"
 	"strings"
+
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 const (
@@ -67,23 +69,26 @@ func (a *api) handleChat(w http.ResponseWriter, r *http.Request) {
 			writeError(w, http.StatusBadRequest, "invalid_conversation_id", "conversation_id must be a UUID")
 			return
 		}
-		id = *req.ConversationID
+		id = strings.ToLower(*req.ConversationID)
 	}
 
 	ctx := r.Context()
 	convID, err := a.chat.EnsureConversation(ctx, id)
 	if err != nil {
-		slog.Error("ensure conversation", "err", err)
+		slog.Error("ensure conversation", "err", err,
+			"request_id", middleware.GetReqID(ctx), "conversation_id", id)
 		writeError(w, http.StatusInternalServerError, "internal", "could not process the request")
 		return
 	}
 	if err := a.chat.AddMessage(ctx, convID, "user", question); err != nil {
-		slog.Error("add user message", "err", err)
+		slog.Error("add user message", "err", err,
+			"request_id", middleware.GetReqID(ctx), "conversation_id", convID, "role", "user")
 		writeError(w, http.StatusInternalServerError, "internal", "could not process the request")
 		return
 	}
 	if err := a.chat.AddMessage(ctx, convID, "assistant", stubAnswer); err != nil {
-		slog.Error("add assistant message", "err", err)
+		slog.Error("add assistant message", "err", err,
+			"request_id", middleware.GetReqID(ctx), "conversation_id", convID, "role", "assistant")
 		writeError(w, http.StatusInternalServerError, "internal", "could not process the request")
 		return
 	}

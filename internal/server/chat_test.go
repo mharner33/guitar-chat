@@ -71,6 +71,24 @@ func TestChatPassesThroughProvidedConversationID(t *testing.T) {
 	}
 }
 
+func TestChatNormalizesConversationIDToLowercase(t *testing.T) {
+	f := &fakeChatStore{}
+	upper := "ABCDEF12-3456-7890-ABCD-EF1234567890"
+	lower := strings.ToLower(upper)
+	rr := postChat(t, f, `{"conversation_id": "`+upper+`", "question": "hi"}`)
+	if rr.Code != http.StatusOK {
+		t.Fatalf("status = %d, want 200", rr.Code)
+	}
+	var resp chatResponse
+	_ = json.Unmarshal(rr.Body.Bytes(), &resp)
+	if resp.ConversationID != lower {
+		t.Fatalf("conversation_id = %q, want %q", resp.ConversationID, lower)
+	}
+	if len(f.ensureCalls) != 1 || f.ensureCalls[0] != lower {
+		t.Fatalf("ensureCalls = %v, want [%q]", f.ensureCalls, lower)
+	}
+}
+
 func TestChatValidation(t *testing.T) {
 	cases := []struct {
 		name, body, wantCode string
@@ -101,6 +119,19 @@ func TestChatValidation(t *testing.T) {
 
 func TestChatStoreErrorIs500(t *testing.T) {
 	f := &fakeChatStore{ensureErr: errTest}
+	rr := postChat(t, f, `{"question": "hi"}`)
+	if rr.Code != http.StatusInternalServerError {
+		t.Fatalf("status = %d, want 500", rr.Code)
+	}
+	var env errorEnvelope
+	_ = json.Unmarshal(rr.Body.Bytes(), &env)
+	if env.Error.Code != "internal" {
+		t.Fatalf("code = %q, want internal", env.Error.Code)
+	}
+}
+
+func TestChatAddMessageErrorIs500(t *testing.T) {
+	f := &fakeChatStore{addErr: errTest}
 	rr := postChat(t, f, `{"question": "hi"}`)
 	if rr.Code != http.StatusInternalServerError {
 		t.Fatalf("status = %d, want 500", rr.Code)
