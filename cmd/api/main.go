@@ -35,6 +35,16 @@ func main() {
 func run() error {
 	ctx := context.Background()
 
+	// Local dev convenience: pick up ./.env if present. Real environment
+	// variables take precedence; in containers the file is absent.
+	loaded, err := config.LoadDotEnv(".env")
+	if err != nil {
+		return err
+	}
+	if loaded {
+		slog.Info("loaded .env")
+	}
+
 	cfg, err := config.Load()
 	if err != nil {
 		return err
