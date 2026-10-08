@@ -2,6 +2,7 @@ package server
 
 import (
 	"encoding/json"
+	"errors"
 	"log/slog"
 	"net/http"
 	"regexp"
@@ -10,6 +11,7 @@ import (
 
 const (
 	maxQuestionRunes = 4000
+	maxBodyBytes     = 64 << 10 // 64 KiB cap on the raw request body
 	// stubAnswer is a fixed placeholder: it calls no LLM and asserts no theory,
 	// honoring the "never bypass RAG" guardrail. Real answers arrive in Phase 2.
 	stubAnswer = "The answer pipeline isn't wired up yet — grounded answers arrive in Phase 2."
@@ -37,8 +39,14 @@ type chatResponse struct {
 }
 
 func (a *api) handleChat(w http.ResponseWriter, r *http.Request) {
+	r.Body = http.MaxBytesReader(w, r.Body, maxBodyBytes)
 	var req chatRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		var tooBig *http.MaxBytesError
+		if errors.As(err, &tooBig) {
+			writeError(w, http.StatusBadRequest, "question_too_long", "request body exceeds the maximum size")
+			return
+		}
 		writeError(w, http.StatusBadRequest, "invalid_json", "request body is not valid JSON")
 		return
 	}

@@ -79,6 +79,7 @@ func TestChatValidation(t *testing.T) {
 		{"empty question", `{"question": ""}`, "invalid_request"},
 		{"whitespace question", `{"question": "   "}`, "invalid_request"},
 		{"too long", `{"question": "` + strings.Repeat("a", 4001) + `"}`, "question_too_long"},
+		{"body over 64 KiB", `{"question": "` + strings.Repeat("a", 64<<10) + `"}`, "question_too_long"},
 		{"bad conversation id", `{"conversation_id": "not-a-uuid", "question": "hi"}`, "invalid_conversation_id"},
 	}
 	for _, tc := range cases {
@@ -116,3 +117,18 @@ var errTest = errTestType("boom")
 type errTestType string
 
 func (e errTestType) Error() string { return string(e) }
+
+// The question itself is short; only the raw body exceeds the 64 KiB cap, so
+// this fails unless MaxBytesReader is applied before decoding.
+func TestChatBodyCapRejectsOversizedBodyWithShortQuestion(t *testing.T) {
+	body := `{"question": "hi", "pad": "` + strings.Repeat("x", 64<<10) + `"}`
+	rr := postChat(t, &fakeChatStore{}, body)
+	if rr.Code != http.StatusBadRequest {
+		t.Fatalf("status = %d, want 400", rr.Code)
+	}
+	var env errorEnvelope
+	_ = json.Unmarshal(rr.Body.Bytes(), &env)
+	if env.Error.Code != "question_too_long" {
+		t.Fatalf("code = %q, want question_too_long", env.Error.Code)
+	}
+}

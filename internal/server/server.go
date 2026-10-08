@@ -32,8 +32,8 @@ func New(cfg config.Config, chat ChatStore, assets fs.FS) http.Handler {
 
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
+	r.Use(accessLog) // wraps Recoverer so recovered panics are logged with status 500
 	r.Use(middleware.Recoverer)
-	r.Use(accessLog)
 	r.Use(middleware.Timeout(30 * time.Second))
 
 	r.Get("/healthz", handleHealth)
