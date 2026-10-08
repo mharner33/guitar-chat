@@ -1,18 +1,25 @@
 // Command api serves the Guitar Theory Chat HTTP API and the embedded web UI.
 //
-// Phase 0: loads config, connects to Postgres, applies migrations, and enforces
-// the embedding-dimension guard. The chi server and routes are added in Phase 1
-// (see docs/plan.md).
+// It loads config, connects to Postgres, applies migrations, verifies the
+// embedding-dimension guard, then serves the chi router until SIGINT/SIGTERM.
 package main
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"log/slog"
+	"net/http"
 	"os"
+	"os/signal"
+	"syscall"
+	"time"
 
 	"github.com/mharner33/guitar-chat/internal/config"
+	"github.com/mharner33/guitar-chat/internal/server"
 	"github.com/mharner33/guitar-chat/internal/store"
 	"github.com/mharner33/guitar-chat/migrations"
+	"github.com/mharner33/guitar-chat/web"
 )
 
 func main() {
@@ -20,7 +27,7 @@ func main() {
 	slog.SetDefault(logger)
 
 	if err := run(); err != nil {
-		slog.Error("startup failed", "err", err)
+		slog.Error("api exited with error", "err", err)
 		os.Exit(1)
 	}
 }
@@ -40,22 +47,59 @@ func run() error {
 		"observability_enabled", cfg.ObservabilityEnabled(),
 	)
 
-	st, err := store.Open(ctx, cfg.DatabaseURL)
+	// Startup DB work runs under a deadline. The pool's lifetime is not tied to
+	// this context: pgxpool.New uses ctx only for the initial connect.
+	startCtx, cancelStart := context.WithTimeout(ctx, 30*time.Second)
+	defer cancelStart()
+
+	st, err := store.Open(startCtx, cfg.DatabaseURL)
 	if err != nil {
 		return err
 	}
 	defer st.Close()
 
-	if err := st.Migrate(ctx, migrations.FS); err != nil {
+	if err := st.Migrate(startCtx, migrations.FS); err != nil {
 		return err
 	}
 	slog.Info("migrations applied")
 
-	if err := st.CheckEmbeddingDimensions(ctx, cfg.EmbeddingDimensions); err != nil {
+	if err := st.CheckEmbeddingDimensions(startCtx, cfg.EmbeddingDimensions); err != nil {
 		return err
 	}
+	cancelStart()
 	slog.Info("embedding dimensions verified", "dimensions", cfg.EmbeddingDimensions)
 
-	// Phase 1 wires the chi server and routes here.
-	return nil
+	srv := &http.Server{
+		Addr:              cfg.Addr,
+		Handler:           server.New(cfg, st, web.Assets),
+		ReadHeaderTimeout: 10 * time.Second,
+		ReadTimeout:       15 * time.Second,
+		WriteTimeout:      35 * time.Second,
+		IdleTimeout:       60 * time.Second,
+	}
+
+	sigCtx, stop := signal.NotifyContext(ctx, os.Interrupt, syscall.SIGTERM)
+	defer stop()
+
+	errCh := make(chan error, 1)
+	go func() {
+		slog.Info("http server listening", "addr", cfg.Addr)
+		if err := srv.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+			errCh <- err
+		}
+	}()
+
+	select {
+	case err := <-errCh:
+		return fmt.Errorf("http server: %w", err)
+	case <-sigCtx.Done():
+		slog.Info("shutdown signal received")
+		stop()
+		shutCtx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		if err := srv.Shutdown(shutCtx); err != nil {
+			return fmt.Errorf("graceful shutdown: %w", err)
+		}
+		return nil
+	}
 }
