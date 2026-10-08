@@ -47,11 +47,6 @@ func handleHealth(w http.ResponseWriter, _ *http.Request) {
 	writeJSON(w, http.StatusOK, map[string]string{"status": "ok"})
 }
 
-// handleChat is a TEMPORARY stub so Task 2 compiles; Task 3 replaces it in chat.go.
-func (a *api) handleChat(w http.ResponseWriter, _ *http.Request) {
-	writeError(w, http.StatusNotImplemented, "not_implemented", "chat arrives in Task 3")
-}
-
 // accessLog emits one slog-JSON line per request.
 func accessLog(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
