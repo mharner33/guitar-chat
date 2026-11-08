@@ -1,0 +1,514 @@
+---
+type: scale
+slug: /scales/c-sharp-locrian-scale
+title: C# Locrian Scale
+description: The locrian scale built on C#.
+tags:
+- scale
+- locrian
+- c
+parent: /scales
+prerequisites:
+- /scales/d-major-scale
+interval_formula:
+- 1
+- 2
+- 2
+- 1
+- 2
+- 2
+- 2
+degree_functions:
+- tonic
+- supertonic
+- mediant
+- subdominant
+- dominant
+- submediant
+- subtonic
+theory:
+  category: scale
+  root:
+    pc: 1
+    name: C#
+  intervals:
+  - '1'
+  - b2
+  - b3
+  - '4'
+  - b5
+  - b6
+  - b7
+  semitones:
+  - 0
+  - 1
+  - 3
+  - 5
+  - 6
+  - 8
+  - 10
+  pitch_classes:
+  - 1
+  - 2
+  - 4
+  - 6
+  - 7
+  - 9
+  - 11
+  spelling:
+  - C#
+  - D
+  - E
+  - F#
+  - G
+  - A
+  - B
+  enharmonic_policy: prefer_sharps
+  key_context: C#
+musical_forms:
+- form: pitch_set
+  id: c-sharp-locrian-scale-pitch-set
+  pitch_classes:
+  - 1
+  - 2
+  - 4
+  - 6
+  - 7
+  - 9
+  - 11
+  intervals:
+  - '1'
+  - b2
+  - b3
+  - '4'
+  - b5
+  - b6
+  - b7
+  spelling:
+  - C#
+  - D
+  - E
+  - F#
+  - G
+  - A
+  - B
+- form: pattern
+  id: c-sharp-locrian-scale-pattern-1
+  system: 3-note-per-string
+  degree: 1
+  start_fret: 9
+  end_fret: 14
+  notes:
+  - string: 6
+    fret: 9
+    degree: 1
+    interval: '1'
+    note: C#
+    pc: 1
+    is_root: true
+  - string: 6
+    fret: 10
+    degree: 2
+    interval: b2
+    note: D
+    pc: 2
+    is_root: false
+  - string: 6
+    fret: 12
+    degree: 3
+    interval: b3
+    note: E
+    pc: 4
+    is_root: false
+  - string: 5
+    fret: 9
+    degree: 4
+    interval: '4'
+    note: F#
+    pc: 6
+    is_root: false
+  - string: 5
+    fret: 10
+    degree: 5
+    interval: b5
+    note: G
+    pc: 7
+    is_root: false
+  - string: 5
+    fret: 12
+    degree: 6
+    interval: b6
+    note: A
+    pc: 9
+    is_root: false
+  - string: 4
+    fret: 9
+    degree: 7
+    interval: b7
+    note: B
+    pc: 11
+    is_root: false
+  - string: 4
+    fret: 11
+    degree: 1
+    interval: '1'
+    note: C#
+    pc: 1
+    is_root: true
+  - string: 4
+    fret: 12
+    degree: 2
+    interval: b2
+    note: D
+    pc: 2
+    is_root: false
+  - string: 3
+    fret: 9
+    degree: 3
+    interval: b3
+    note: E
+    pc: 4
+    is_root: false
+  - string: 3
+    fret: 11
+    degree: 4
+    interval: '4'
+    note: F#
+    pc: 6
+    is_root: false
+  - string: 3
+    fret: 12
+    degree: 5
+    interval: b5
+    note: G
+    pc: 7
+    is_root: false
+  - string: 2
+    fret: 10
+    degree: 6
+    interval: b6
+    note: A
+    pc: 9
+    is_root: false
+  - string: 2
+    fret: 12
+    degree: 7
+    interval: b7
+    note: B
+    pc: 11
+    is_root: false
+  - string: 2
+    fret: 14
+    degree: 1
+    interval: '1'
+    note: C#
+    pc: 1
+    is_root: true
+  - string: 1
+    fret: 10
+    degree: 2
+    interval: b2
+    note: D
+    pc: 2
+    is_root: false
+  - string: 1
+    fret: 12
+    degree: 3
+    interval: b3
+    note: E
+    pc: 4
+    is_root: false
+  - string: 1
+    fret: 14
+    degree: 4
+    interval: '4'
+    note: F#
+    pc: 6
+    is_root: false
+- form: pattern
+  id: c-sharp-locrian-scale-pattern-2
+  system: 3-note-per-string
+  degree: 2
+  start_fret: 10
+  end_fret: 15
+  notes:
+  - string: 6
+    fret: 10
+    degree: 2
+    interval: b2
+    note: D
+    pc: 2
+    is_root: false
+  - string: 6
+    fret: 12
+    degree: 3
+    interval: b3
+    note: E
+    pc: 4
+    is_root: false
+  - string: 6
+    fret: 14
+    degree: 4
+    interval: '4'
+    note: F#
+    pc: 6
+    is_root: false
+  - string: 5
+    fret: 10
+    degree: 5
+    interval: b5
+    note: G
+    pc: 7
+    is_root: false
+  - string: 5
+    fret: 12
+    degree: 6
+    interval: b6
+    note: A
+    pc: 9
+    is_root: false
+  - string: 5
+    fret: 14
+    degree: 7
+    interval: b7
+    note: B
+    pc: 11
+    is_root: false
+  - string: 4
+    fret: 11
+    degree: 1
+    interval: '1'
+    note: C#
+    pc: 1
+    is_root: true
+  - string: 4
+    fret: 12
+    degree: 2
+    interval: b2
+    note: D
+    pc: 2
+    is_root: false
+  - string: 4
+    fret: 14
+    degree: 3
+    interval: b3
+    note: E
+    pc: 4
+    is_root: false
+  - string: 3
+    fret: 11
+    degree: 4
+    interval: '4'
+    note: F#
+    pc: 6
+    is_root: false
+  - string: 3
+    fret: 12
+    degree: 5
+    interval: b5
+    note: G
+    pc: 7
+    is_root: false
+  - string: 3
+    fret: 14
+    degree: 6
+    interval: b6
+    note: A
+    pc: 9
+    is_root: false
+  - string: 2
+    fret: 12
+    degree: 7
+    interval: b7
+    note: B
+    pc: 11
+    is_root: false
+  - string: 2
+    fret: 14
+    degree: 1
+    interval: '1'
+    note: C#
+    pc: 1
+    is_root: true
+  - string: 2
+    fret: 15
+    degree: 2
+    interval: b2
+    note: D
+    pc: 2
+    is_root: false
+  - string: 1
+    fret: 12
+    degree: 3
+    interval: b3
+    note: E
+    pc: 4
+    is_root: false
+  - string: 1
+    fret: 14
+    degree: 4
+    interval: '4'
+    note: F#
+    pc: 6
+    is_root: false
+  - string: 1
+    fret: 15
+    degree: 5
+    interval: b5
+    note: G
+    pc: 7
+    is_root: false
+- form: pattern
+  id: c-sharp-locrian-scale-pattern-3
+  system: 3-note-per-string
+  degree: 3
+  start_fret: 0
+  end_fret: 5
+  notes:
+  - string: 6
+    fret: 0
+    degree: 3
+    interval: b3
+    note: E
+    pc: 4
+    is_root: false
+  - string: 6
+    fret: 2
+    degree: 4
+    interval: '4'
+    note: F#
+    pc: 6
+    is_root: false
+  - string: 6
+    fret: 3
+    degree: 5
+    interval: b5
+    note: G
+    pc: 7
+    is_root: false
+  - string: 5
+    fret: 0
+    degree: 6
+    interval: b6
+    note: A
+    pc: 9
+    is_root: false
+  - string: 5
+    fret: 2
+    degree: 7
+    interval: b7
+    note: B
+    pc: 11
+    is_root: false
+  - string: 5
+    fret: 4
+    degree: 1
+    interval: '1'
+    note: C#
+    pc: 1
+    is_root: true
+  - string: 4
+    fret: 0
+    degree: 2
+    interval: b2
+    note: D
+    pc: 2
+    is_root: false
+  - string: 4
+    fret: 2
+    degree: 3
+    interval: b3
+    note: E
+    pc: 4
+    is_root: false
+  - string: 4
+    fret: 4
+    degree: 4
+    interval: '4'
+    note: F#
+    pc: 6
+    is_root: false
+  - string: 3
+    fret: 0
+    degree: 5
+    interval: b5
+    note: G
+    pc: 7
+    is_root: false
+  - string: 3
+    fret: 2
+    degree: 6
+    interval: b6
+    note: A
+    pc: 9
+    is_root: false
+  - string: 3
+    fret: 4
+    degree: 7
+    interval: b7
+    note: B
+    pc: 11
+    is_root: false
+  - string: 2
+    fret: 2
+    degree: 1
+    interval: '1'
+    note: C#
+    pc: 1
+    is_root: true
+  - string: 2
+    fret: 3
+    degree: 2
+    interval: b2
+    note: D
+    pc: 2
+    is_root: false
+  - string: 2
+    fret: 5
+    degree: 3
+    interval: b3
+    note: E
+    pc: 4
+    is_root: false
+  - string: 1
+    fret: 2
+    degree: 4
+    interval: '4'
+    note: F#
+    pc: 6
+    is_root: false
+  - string: 1
+    fret: 3
+    degree: 5
+    interval: b5
+    note: G
+    pc: 7
+    is_root: false
+  - string: 1
+    fret: 5
+    degree: 6
+    interval: b6
+    note: A
+    pc: 9
+    is_root: false
+---
+
+# C# Locrian Scale
+
+The C# locrian scale is the darkest mode, built on a diminished tonic — rarely used as a tonal center. It is spelled **C# – D – E – F# – G – A – B**.
+
+**Step pattern:** H–W–W–H–W–W–W  *(W = whole, H = half, W½ = one-and-a-half steps)*
+
+| Degree | Note | Interval | Function |
+|---|---|---|---|
+| 1 | C# | 1 | tonic |
+| 2 | D | b2 | supertonic |
+| 3 | E | b3 | mediant |
+| 4 | F# | 4 | subdominant |
+| 5 | G | b5 | dominant |
+| 6 | A | b6 | submediant |
+| 7 | B | b7 | subtonic |
+
+## Related
+
+- **Build on:** [D Major Scale](/scales/d-major-scale.md)

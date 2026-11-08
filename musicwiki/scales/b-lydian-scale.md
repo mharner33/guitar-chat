@@ -1,0 +1,514 @@
+---
+type: scale
+slug: /scales/b-lydian-scale
+title: B Lydian Scale
+description: The lydian scale built on B.
+tags:
+- scale
+- lydian
+- b
+parent: /scales
+prerequisites:
+- /scales/g-flat-major-scale
+interval_formula:
+- 2
+- 2
+- 2
+- 1
+- 2
+- 2
+- 1
+degree_functions:
+- tonic
+- supertonic
+- mediant
+- subdominant
+- dominant
+- submediant
+- leading-tone
+theory:
+  category: scale
+  root:
+    pc: 11
+    name: B
+  intervals:
+  - '1'
+  - '2'
+  - '3'
+  - b5
+  - '5'
+  - '6'
+  - '7'
+  semitones:
+  - 0
+  - 2
+  - 4
+  - 6
+  - 7
+  - 9
+  - 11
+  pitch_classes:
+  - 11
+  - 1
+  - 3
+  - 5
+  - 6
+  - 8
+  - 10
+  spelling:
+  - B
+  - C#
+  - D#
+  - E#
+  - F#
+  - G#
+  - A#
+  enharmonic_policy: prefer_sharps
+  key_context: B
+musical_forms:
+- form: pitch_set
+  id: b-lydian-scale-pitch-set
+  pitch_classes:
+  - 11
+  - 1
+  - 3
+  - 5
+  - 6
+  - 8
+  - 10
+  intervals:
+  - '1'
+  - '2'
+  - '3'
+  - b5
+  - '5'
+  - '6'
+  - '7'
+  spelling:
+  - B
+  - C#
+  - D#
+  - E#
+  - F#
+  - G#
+  - A#
+- form: pattern
+  id: b-lydian-scale-pattern-1
+  system: 3-note-per-string
+  degree: 1
+  start_fret: 7
+  end_fret: 13
+  notes:
+  - string: 6
+    fret: 7
+    degree: 1
+    interval: '1'
+    note: B
+    pc: 11
+    is_root: true
+  - string: 6
+    fret: 9
+    degree: 2
+    interval: '2'
+    note: C#
+    pc: 1
+    is_root: false
+  - string: 6
+    fret: 11
+    degree: 3
+    interval: '3'
+    note: D#
+    pc: 3
+    is_root: false
+  - string: 5
+    fret: 8
+    degree: 4
+    interval: b5
+    note: E#
+    pc: 5
+    is_root: false
+  - string: 5
+    fret: 9
+    degree: 5
+    interval: '5'
+    note: F#
+    pc: 6
+    is_root: false
+  - string: 5
+    fret: 11
+    degree: 6
+    interval: '6'
+    note: G#
+    pc: 8
+    is_root: false
+  - string: 4
+    fret: 8
+    degree: 7
+    interval: '7'
+    note: A#
+    pc: 10
+    is_root: false
+  - string: 4
+    fret: 9
+    degree: 1
+    interval: '1'
+    note: B
+    pc: 11
+    is_root: true
+  - string: 4
+    fret: 11
+    degree: 2
+    interval: '2'
+    note: C#
+    pc: 1
+    is_root: false
+  - string: 3
+    fret: 8
+    degree: 3
+    interval: '3'
+    note: D#
+    pc: 3
+    is_root: false
+  - string: 3
+    fret: 10
+    degree: 4
+    interval: b5
+    note: E#
+    pc: 5
+    is_root: false
+  - string: 3
+    fret: 11
+    degree: 5
+    interval: '5'
+    note: F#
+    pc: 6
+    is_root: false
+  - string: 2
+    fret: 9
+    degree: 6
+    interval: '6'
+    note: G#
+    pc: 8
+    is_root: false
+  - string: 2
+    fret: 11
+    degree: 7
+    interval: '7'
+    note: A#
+    pc: 10
+    is_root: false
+  - string: 2
+    fret: 12
+    degree: 1
+    interval: '1'
+    note: B
+    pc: 11
+    is_root: true
+  - string: 1
+    fret: 9
+    degree: 2
+    interval: '2'
+    note: C#
+    pc: 1
+    is_root: false
+  - string: 1
+    fret: 11
+    degree: 3
+    interval: '3'
+    note: D#
+    pc: 3
+    is_root: false
+  - string: 1
+    fret: 13
+    degree: 4
+    interval: b5
+    note: E#
+    pc: 5
+    is_root: false
+- form: pattern
+  id: b-lydian-scale-pattern-2
+  system: 3-note-per-string
+  degree: 2
+  start_fret: 9
+  end_fret: 14
+  notes:
+  - string: 6
+    fret: 9
+    degree: 2
+    interval: '2'
+    note: C#
+    pc: 1
+    is_root: false
+  - string: 6
+    fret: 11
+    degree: 3
+    interval: '3'
+    note: D#
+    pc: 3
+    is_root: false
+  - string: 6
+    fret: 13
+    degree: 4
+    interval: b5
+    note: E#
+    pc: 5
+    is_root: false
+  - string: 5
+    fret: 9
+    degree: 5
+    interval: '5'
+    note: F#
+    pc: 6
+    is_root: false
+  - string: 5
+    fret: 11
+    degree: 6
+    interval: '6'
+    note: G#
+    pc: 8
+    is_root: false
+  - string: 5
+    fret: 13
+    degree: 7
+    interval: '7'
+    note: A#
+    pc: 10
+    is_root: false
+  - string: 4
+    fret: 9
+    degree: 1
+    interval: '1'
+    note: B
+    pc: 11
+    is_root: true
+  - string: 4
+    fret: 11
+    degree: 2
+    interval: '2'
+    note: C#
+    pc: 1
+    is_root: false
+  - string: 4
+    fret: 13
+    degree: 3
+    interval: '3'
+    note: D#
+    pc: 3
+    is_root: false
+  - string: 3
+    fret: 10
+    degree: 4
+    interval: b5
+    note: E#
+    pc: 5
+    is_root: false
+  - string: 3
+    fret: 11
+    degree: 5
+    interval: '5'
+    note: F#
+    pc: 6
+    is_root: false
+  - string: 3
+    fret: 13
+    degree: 6
+    interval: '6'
+    note: G#
+    pc: 8
+    is_root: false
+  - string: 2
+    fret: 11
+    degree: 7
+    interval: '7'
+    note: A#
+    pc: 10
+    is_root: false
+  - string: 2
+    fret: 12
+    degree: 1
+    interval: '1'
+    note: B
+    pc: 11
+    is_root: true
+  - string: 2
+    fret: 14
+    degree: 2
+    interval: '2'
+    note: C#
+    pc: 1
+    is_root: false
+  - string: 1
+    fret: 11
+    degree: 3
+    interval: '3'
+    note: D#
+    pc: 3
+    is_root: false
+  - string: 1
+    fret: 13
+    degree: 4
+    interval: b5
+    note: E#
+    pc: 5
+    is_root: false
+  - string: 1
+    fret: 14
+    degree: 5
+    interval: '5'
+    note: F#
+    pc: 6
+    is_root: false
+- form: pattern
+  id: b-lydian-scale-pattern-3
+  system: 3-note-per-string
+  degree: 3
+  start_fret: 11
+  end_fret: 16
+  notes:
+  - string: 6
+    fret: 11
+    degree: 3
+    interval: '3'
+    note: D#
+    pc: 3
+    is_root: false
+  - string: 6
+    fret: 13
+    degree: 4
+    interval: b5
+    note: E#
+    pc: 5
+    is_root: false
+  - string: 6
+    fret: 14
+    degree: 5
+    interval: '5'
+    note: F#
+    pc: 6
+    is_root: false
+  - string: 5
+    fret: 11
+    degree: 6
+    interval: '6'
+    note: G#
+    pc: 8
+    is_root: false
+  - string: 5
+    fret: 13
+    degree: 7
+    interval: '7'
+    note: A#
+    pc: 10
+    is_root: false
+  - string: 5
+    fret: 14
+    degree: 1
+    interval: '1'
+    note: B
+    pc: 11
+    is_root: true
+  - string: 4
+    fret: 11
+    degree: 2
+    interval: '2'
+    note: C#
+    pc: 1
+    is_root: false
+  - string: 4
+    fret: 13
+    degree: 3
+    interval: '3'
+    note: D#
+    pc: 3
+    is_root: false
+  - string: 4
+    fret: 15
+    degree: 4
+    interval: b5
+    note: E#
+    pc: 5
+    is_root: false
+  - string: 3
+    fret: 11
+    degree: 5
+    interval: '5'
+    note: F#
+    pc: 6
+    is_root: false
+  - string: 3
+    fret: 13
+    degree: 6
+    interval: '6'
+    note: G#
+    pc: 8
+    is_root: false
+  - string: 3
+    fret: 15
+    degree: 7
+    interval: '7'
+    note: A#
+    pc: 10
+    is_root: false
+  - string: 2
+    fret: 12
+    degree: 1
+    interval: '1'
+    note: B
+    pc: 11
+    is_root: true
+  - string: 2
+    fret: 14
+    degree: 2
+    interval: '2'
+    note: C#
+    pc: 1
+    is_root: false
+  - string: 2
+    fret: 16
+    degree: 3
+    interval: '3'
+    note: D#
+    pc: 3
+    is_root: false
+  - string: 1
+    fret: 13
+    degree: 4
+    interval: b5
+    note: E#
+    pc: 5
+    is_root: false
+  - string: 1
+    fret: 14
+    degree: 5
+    interval: '5'
+    note: F#
+    pc: 6
+    is_root: false
+  - string: 1
+    fret: 16
+    degree: 6
+    interval: '6'
+    note: G#
+    pc: 8
+    is_root: false
+---
+
+# B Lydian Scale
+
+The B lydian scale is a major mode with a raised fourth — bright and dreamlike. It is spelled **B – C# – D# – E# – F# – G# – A#**.
+
+**Step pattern:** W–W–W–H–W–W–H  *(W = whole, H = half, W½ = one-and-a-half steps)*
+
+| Degree | Note | Interval | Function |
+|---|---|---|---|
+| 1 | B | 1 | tonic |
+| 2 | C# | 2 | supertonic |
+| 3 | D# | 3 | mediant |
+| 4 | E# | b5 | subdominant |
+| 5 | F# | 5 | dominant |
+| 6 | G# | 6 | submediant |
+| 7 | A# | 7 | leading-tone |
+
+## Related
+
+- **Build on:** [Gb Major Scale](/scales/g-flat-major-scale.md)
