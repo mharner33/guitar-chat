@@ -1,0 +1,7 @@
+[
+  {"id": "blues-scale", "title": "The Blues Scale (adding the b5)", "dest": "topics/blues-scale.md"},
+  {"id": "major-pentatonic", "title": "Major Pentatonic Scale", "dest": "topics/major-pentatonic.md"},
+  {"id": "string-bending", "title": "String Bending Basics", "dest": "topics/string-bending.md"},
+  {"id": "relative-major-minor", "title": "Relative Major and Minor", "dest": "topics/relative-major-minor.md"},
+  {"id": "improvisation-basics", "title": "Improvisation Basics", "dest": "topics/improvisation-basics.md"}
+]

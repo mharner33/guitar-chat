@@ -1,0 +1,602 @@
+{
+  "schema_version": 1,
+  "id": "a-minor-pentatonic-positions",
+  "title": "Using the A Minor Pentatonic Scale Across All Five Positions",
+  "metadata": {
+    "audience_level": "intermediate",
+    "objectives": [
+      "Identify the five notes of the minor pentatonic scale in any key",
+      "Play all five positions cleanly at a moderate tempo",
+      "Transition between adjacent positions without pausing",
+      "Improvise using the scale in a musical context"
+    ],
+    "prerequisites": [
+      "Comfortable with alternate picking",
+      "Can play a one-octave major scale",
+      "Knows the note names on the low E string up to the 12th fret"
+    ],
+    "estimated_minutes": 20,
+    "prompt": "create a lesson on how to use the minor pentatonic scale and the various positions"
+  },
+  "musical_context": {
+    "tuning": "standard",
+    "key": "A minor",
+    "position_convention": "5-position",
+    "diagrams": [
+      {
+        "id": "diagram-a-min-pent-pos-1",
+        "type": "scale-diagram",
+        "name": "A Minor Pentatonic \u2013 Position 1",
+        "render": {
+          "format": "svg",
+          "strings": 6,
+          "frets": {
+            "low": 5,
+            "high": 8
+          },
+          "notes": [
+            {
+              "string": 6,
+              "fret": 5,
+              "pitch_class": "A",
+              "is_root": true
+            },
+            {
+              "string": 6,
+              "fret": 8,
+              "pitch_class": "C",
+              "is_root": false
+            },
+            {
+              "string": 5,
+              "fret": 5,
+              "pitch_class": "D",
+              "is_root": false
+            },
+            {
+              "string": 5,
+              "fret": 7,
+              "pitch_class": "E",
+              "is_root": false
+            },
+            {
+              "string": 4,
+              "fret": 5,
+              "pitch_class": "G",
+              "is_root": false
+            },
+            {
+              "string": 4,
+              "fret": 7,
+              "pitch_class": "A",
+              "is_root": true
+            },
+            {
+              "string": 3,
+              "fret": 5,
+              "pitch_class": "C",
+              "is_root": false
+            },
+            {
+              "string": 3,
+              "fret": 7,
+              "pitch_class": "D",
+              "is_root": false
+            },
+            {
+              "string": 2,
+              "fret": 5,
+              "pitch_class": "E",
+              "is_root": false
+            },
+            {
+              "string": 2,
+              "fret": 8,
+              "pitch_class": "G",
+              "is_root": false
+            },
+            {
+              "string": 1,
+              "fret": 5,
+              "pitch_class": "A",
+              "is_root": true
+            },
+            {
+              "string": 1,
+              "fret": 8,
+              "pitch_class": "C",
+              "is_root": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "diagram-a-min-pent-pos-2",
+        "type": "scale-diagram",
+        "name": "A Minor Pentatonic \u2013 Position 2",
+        "render": {
+          "format": "svg",
+          "strings": 6,
+          "frets": {
+            "low": 7,
+            "high": 10
+          },
+          "notes": [
+            {
+              "string": 6,
+              "fret": 8,
+              "pitch_class": "C",
+              "is_root": false
+            },
+            {
+              "string": 6,
+              "fret": 10,
+              "pitch_class": "D",
+              "is_root": false
+            },
+            {
+              "string": 5,
+              "fret": 7,
+              "pitch_class": "E",
+              "is_root": false
+            },
+            {
+              "string": 5,
+              "fret": 10,
+              "pitch_class": "G",
+              "is_root": false
+            },
+            {
+              "string": 4,
+              "fret": 7,
+              "pitch_class": "A",
+              "is_root": true
+            },
+            {
+              "string": 4,
+              "fret": 10,
+              "pitch_class": "C",
+              "is_root": false
+            },
+            {
+              "string": 3,
+              "fret": 7,
+              "pitch_class": "D",
+              "is_root": false
+            },
+            {
+              "string": 3,
+              "fret": 9,
+              "pitch_class": "E",
+              "is_root": false
+            },
+            {
+              "string": 2,
+              "fret": 8,
+              "pitch_class": "G",
+              "is_root": false
+            },
+            {
+              "string": 2,
+              "fret": 10,
+              "pitch_class": "A",
+              "is_root": true
+            },
+            {
+              "string": 1,
+              "fret": 8,
+              "pitch_class": "C",
+              "is_root": false
+            },
+            {
+              "string": 1,
+              "fret": 10,
+              "pitch_class": "D",
+              "is_root": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "diagram-a-min-pent-pos-3",
+        "type": "scale-diagram",
+        "name": "A Minor Pentatonic \u2013 Position 3",
+        "render": {
+          "format": "svg",
+          "strings": 6,
+          "frets": {
+            "low": 9,
+            "high": 13
+          },
+          "notes": [
+            {
+              "string": 6,
+              "fret": 10,
+              "pitch_class": "D",
+              "is_root": false
+            },
+            {
+              "string": 6,
+              "fret": 12,
+              "pitch_class": "E",
+              "is_root": false
+            },
+            {
+              "string": 5,
+              "fret": 10,
+              "pitch_class": "G",
+              "is_root": false
+            },
+            {
+              "string": 5,
+              "fret": 12,
+              "pitch_class": "A",
+              "is_root": true
+            },
+            {
+              "string": 4,
+              "fret": 10,
+              "pitch_class": "C",
+              "is_root": false
+            },
+            {
+              "string": 4,
+              "fret": 12,
+              "pitch_class": "D",
+              "is_root": false
+            },
+            {
+              "string": 3,
+              "fret": 9,
+              "pitch_class": "E",
+              "is_root": false
+            },
+            {
+              "string": 3,
+              "fret": 12,
+              "pitch_class": "G",
+              "is_root": false
+            },
+            {
+              "string": 2,
+              "fret": 10,
+              "pitch_class": "A",
+              "is_root": true
+            },
+            {
+              "string": 2,
+              "fret": 13,
+              "pitch_class": "C",
+              "is_root": false
+            },
+            {
+              "string": 1,
+              "fret": 10,
+              "pitch_class": "D",
+              "is_root": false
+            },
+            {
+              "string": 1,
+              "fret": 12,
+              "pitch_class": "E",
+              "is_root": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "diagram-a-min-pent-pos-4",
+        "type": "scale-diagram",
+        "name": "A Minor Pentatonic \u2013 Position 4",
+        "render": {
+          "format": "svg",
+          "strings": 6,
+          "frets": {
+            "low": 12,
+            "high": 15
+          },
+          "notes": [
+            {
+              "string": 6,
+              "fret": 12,
+              "pitch_class": "E",
+              "is_root": false
+            },
+            {
+              "string": 6,
+              "fret": 15,
+              "pitch_class": "G",
+              "is_root": false
+            },
+            {
+              "string": 5,
+              "fret": 12,
+              "pitch_class": "A",
+              "is_root": true
+            },
+            {
+              "string": 5,
+              "fret": 15,
+              "pitch_class": "C",
+              "is_root": false
+            },
+            {
+              "string": 4,
+              "fret": 12,
+              "pitch_class": "D",
+              "is_root": false
+            },
+            {
+              "string": 4,
+              "fret": 14,
+              "pitch_class": "E",
+              "is_root": false
+            },
+            {
+              "string": 3,
+              "fret": 12,
+              "pitch_class": "G",
+              "is_root": false
+            },
+            {
+              "string": 3,
+              "fret": 14,
+              "pitch_class": "A",
+              "is_root": true
+            },
+            {
+              "string": 2,
+              "fret": 13,
+              "pitch_class": "C",
+              "is_root": false
+            },
+            {
+              "string": 2,
+              "fret": 15,
+              "pitch_class": "D",
+              "is_root": false
+            },
+            {
+              "string": 1,
+              "fret": 12,
+              "pitch_class": "E",
+              "is_root": false
+            },
+            {
+              "string": 1,
+              "fret": 15,
+              "pitch_class": "G",
+              "is_root": false
+            }
+          ]
+        }
+      },
+      {
+        "id": "diagram-a-min-pent-pos-5",
+        "type": "scale-diagram",
+        "name": "A Minor Pentatonic \u2013 Position 5",
+        "render": {
+          "format": "svg",
+          "strings": 6,
+          "frets": {
+            "low": 14,
+            "high": 17
+          },
+          "notes": [
+            {
+              "string": 6,
+              "fret": 15,
+              "pitch_class": "G",
+              "is_root": false
+            },
+            {
+              "string": 6,
+              "fret": 17,
+              "pitch_class": "A",
+              "is_root": true
+            },
+            {
+              "string": 5,
+              "fret": 15,
+              "pitch_class": "C",
+              "is_root": false
+            },
+            {
+              "string": 5,
+              "fret": 17,
+              "pitch_class": "D",
+              "is_root": false
+            },
+            {
+              "string": 4,
+              "fret": 14,
+              "pitch_class": "E",
+              "is_root": false
+            },
+            {
+              "string": 4,
+              "fret": 17,
+              "pitch_class": "G",
+              "is_root": false
+            },
+            {
+              "string": 3,
+              "fret": 14,
+              "pitch_class": "A",
+              "is_root": true
+            },
+            {
+              "string": 3,
+              "fret": 17,
+              "pitch_class": "C",
+              "is_root": false
+            },
+            {
+              "string": 2,
+              "fret": 15,
+              "pitch_class": "D",
+              "is_root": false
+            },
+            {
+              "string": 2,
+              "fret": 17,
+              "pitch_class": "E",
+              "is_root": false
+            },
+            {
+              "string": 1,
+              "fret": 15,
+              "pitch_class": "G",
+              "is_root": false
+            },
+            {
+              "string": 1,
+              "fret": 17,
+              "pitch_class": "A",
+              "is_root": true
+            }
+          ]
+        }
+      }
+    ]
+  },
+  "sections": [
+    {
+      "title": "What the minor pentatonic scale is",
+      "body": "The A minor pentatonic scale uses five notes derived from the A natural minor scale, omitting the 2nd and 6th degrees. This produces a stable, blues-friendly sound with no semitone clashes between adjacent scale tones. In A minor the five notes are A / C / D / E / G, corresponding to the intervals root (1), minor third (b3), perfect fourth (4), perfect fifth (5), and minor seventh (b7). On the fretboard it is usually taught as five overlapping positions; learning to move between them smoothly is the foundation for improvising solos.",
+      "diagram_refs": [
+        "diagram-a-min-pent-pos-1"
+      ]
+    },
+    {
+      "title": "Position 1: A minor pentatonic, frets 5-8",
+      "body": "Position 1 covers frets 5 through 8 and contains every note of the scale in a compact span. Play it ascending and descending, using one finger per fret where possible, and keep your thumb behind the neck. Once you can play it cleanly at a moderate tempo, connect it to position 2 by shifting to the nearest shared note on the same string rather than jumping.",
+      "diagram_refs": [
+        "diagram-a-min-pent-pos-1"
+      ]
+    },
+    {
+      "title": "Position 2: A minor pentatonic, frets 7-10",
+      "body": "Position 2 covers frets 7 through 10 and contains every note of the scale in a compact span. Play it ascending and descending, using one finger per fret where possible, and keep your thumb behind the neck. Once you can play it cleanly at a moderate tempo, connect it to position 3 by shifting to the nearest shared note on the same string rather than jumping.",
+      "diagram_refs": [
+        "diagram-a-min-pent-pos-2"
+      ]
+    },
+    {
+      "title": "Position 3: A minor pentatonic, frets 9-13",
+      "body": "Position 3 covers frets 9 through 13 and contains every note of the scale in a compact span. Play it ascending and descending, using one finger per fret where possible, and keep your thumb behind the neck. Once you can play it cleanly at a moderate tempo, connect it to position 4 by shifting to the nearest shared note on the same string rather than jumping.",
+      "diagram_refs": [
+        "diagram-a-min-pent-pos-3"
+      ]
+    },
+    {
+      "title": "Position 4: A minor pentatonic, frets 12-15",
+      "body": "Position 4 covers frets 12 through 15 and contains every note of the scale in a compact span. Play it ascending and descending, using one finger per fret where possible, and keep your thumb behind the neck. Once you can play it cleanly at a moderate tempo, connect it to position 5 by shifting to the nearest shared note on the same string rather than jumping.",
+      "diagram_refs": [
+        "diagram-a-min-pent-pos-4"
+      ]
+    },
+    {
+      "title": "Position 5: A minor pentatonic, frets 14-17",
+      "body": "Position 5 covers frets 14 through 17 and contains every note of the scale in a compact span. Play it ascending and descending, using one finger per fret where possible, and keep your thumb behind the neck. Once you can play it cleanly at a moderate tempo, return toward position 4 through the shared high-E note at fret 15 (play frets 17, 15, 12 descending).",
+      "diagram_refs": [
+        "diagram-a-min-pent-pos-5"
+      ]
+    }
+  ],
+  "practice_steps": [
+    {
+      "goal": "Memorize position 1 shape and play it cleanly",
+      "action": "Play the A minor pentatonic position 1 (frets 5-8) up and down at 60 BPM, one note per click, using alternate picking. Start on the root on the low E string (string 6, fret 5), ascend the full box to fret 8 on the high E string, then descend back to fret 5 on string 6. Add a slight accent on each marked root note (blue circles with R).",
+      "diagram_refs": [
+        "diagram-a-min-pent-pos-1"
+      ],
+      "duration_minutes": 3,
+      "bpm": 60,
+      "reps": 4,
+      "success_criterion": "You can ascend to fret 8 and descend back to fret 5 twice in a row without stopping or missing a note."
+    },
+    {
+      "goal": "Move smoothly between positions 1 and 2",
+      "action": "On string 1 (high E), play eight quarter notes in two bars of 4/4: frets 5, 8, 10, 8 | 8, 10, 8, 5. Fret 8 is shared by positions 1 and 2; fret 10 enters position 2, and the final fret 5 returns to A.",
+      "diagram_refs": [
+        "diagram-a-min-pent-pos-1",
+        "diagram-a-min-pent-pos-2"
+      ],
+      "duration_minutes": 4,
+      "bpm": 60,
+      "reps": 6,
+      "success_criterion": "You can play the full two-bar phrase without stopping and end cleanly on fret 5 (the root A)."
+    },
+    {
+      "goal": "Connect all five positions along one string",
+      "action": "Start on the root of position 1 on string 6 (fret 5) and play the pentatonic notes ascending along string 6 through position 5, then reverse and descend: frets 5, 8, 10, 12, 15, 17, 15, 12, 10, 8, 5 \u2014 one note per click, no stopping. This connects all five boxes along one string; do not attempt to jump back from position 5 to position 1 \u2014 they sit an octave apart.",
+      "diagram_refs": [
+        "diagram-a-min-pent-pos-1",
+        "diagram-a-min-pent-pos-2",
+        "diagram-a-min-pent-pos-3",
+        "diagram-a-min-pent-pos-4",
+        "diagram-a-min-pent-pos-5"
+      ],
+      "duration_minutes": 5,
+      "bpm": 50,
+      "reps": 3,
+      "success_criterion": "One unbroken ascending and descending pass through all five positions along string 6."
+    },
+    {
+      "goal": "Improvise using only position 1",
+      "action": "Over an A minor backing track, improvise for two minutes using only position 1. Emphasize the root and the minor third. Rest for the same amount of time between takes.",
+      "diagram_refs": [
+        "diagram-a-min-pent-pos-1"
+      ],
+      "duration_minutes": 4,
+      "success_criterion": "You can improvise for the full two minutes without playing outside the scale."
+    },
+    {
+      "goal": "Use all five positions melodically",
+      "action": "Improvise over the same backing track, but now deliberately move between positions every four bars. Target the root note in each new position as your landing note.",
+      "diagram_refs": [
+        "diagram-a-min-pent-pos-1",
+        "diagram-a-min-pent-pos-2",
+        "diagram-a-min-pent-pos-3",
+        "diagram-a-min-pent-pos-4",
+        "diagram-a-min-pent-pos-5"
+      ],
+      "duration_minutes": 4,
+      "success_criterion": "You land on the root in at least three different positions across the take."
+    }
+  ],
+  "tips": [
+    "Think of the five positions as one connected shape on the fretboard, not five separate patterns \u2014 every position shares notes with its neighbours.",
+    "Anchor your hand with your index finger at the low end of each position; this keeps your other three fingers free for the higher frets.",
+    "Practice positions in reverse order (5 back to 1) occasionally \u2014 most players over-rely on positions 1 and 2.",
+    "Sing the root note before you start improvising so your ear has a target, not just your fingers."
+  ],
+  "related_topics": [
+    {
+      "id": "blues-scale",
+      "title": "The Blues Scale (adding the b5)",
+      "reason": "One extra note turns minor pentatonic into the blues scale; natural next step."
+    },
+    {
+      "id": "major-pentatonic",
+      "title": "Major Pentatonic Scale",
+      "reason": "A minor pentatonic and C major pentatonic share the same notes and fret locations; only the tonal center changes from A to C."
+    },
+    {
+      "id": "string-bending",
+      "title": "String Bending Basics",
+      "reason": "Bends from the 4 to the 5 are the classic pentatonic move."
+    },
+    {
+      "id": "relative-major-minor",
+      "title": "Relative Major and Minor",
+      "reason": "Explains why A minor pentatonic and C major pentatonic share a shape."
+    },
+    {
+      "id": "improvisation-basics",
+      "title": "Improvisation Basics",
+      "reason": "Practical guidance for building melodic solos from these shapes."
+    }
+  ]
+}
