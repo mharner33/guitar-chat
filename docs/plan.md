@@ -4,7 +4,7 @@ Step-by-step build plan, grounded in `docs/design.md` (§4.1 layout, §12 milest
 
 ## Phase 0 — Scaffolding (prereq for everything)
 
-1. **Project skeleton & config.** Create the `cmd/`, `internal/`, `web/`, `migrations/`, `corpus/`, `evals/` trees. Build `internal/config/config.go` first — the env struct read *once* (DATABASE_URL, all `LLM_*`, `EMBEDDING_DIMENSIONS`, retrieval/rewrite/history knobs, `DD_*`, `JUDGE_MODEL`, `ONLINE_EVAL_SAMPLE_RATE`). Write `.env.example` alongside it with every variable.
+1. **Project skeleton & config.** Create the `cmd/`, `internal/`, `web/`, `migrations/`, `guides/`, `evals/` trees. Build `internal/config/config.go` first — the env struct read *once* (DATABASE_URL, all `LLM_*`, `EMBEDDING_DIMENSIONS`, retrieval/rewrite/history knobs, `DD_*`, `JUDGE_MODEL`, `ONLINE_EVAL_SAMPLE_RATE`). Write `.env.example` alongside it with every variable.
    - *Done when:* `go run ./cmd/api` loads config and fails loudly on missing required vars.
 
 2. **Dev infra.** `docker-compose.yml` (pgvector/pgvector:pg16 + app + one-shot ingest), `Dockerfile` (distroless, `go:embed` web/), and `migrations/001_init.sql` (vector extension, all tables, hnsw cosine index). Wire migrations to run at app start; add the `EMBEDDING_DIMENSIONS` vs `vector(N)` guard in `config`/startup.
@@ -23,7 +23,7 @@ Step-by-step build plan, grounded in `docs/design.md` (§4.1 layout, §12 milest
 
 6. **LLM + embedder clients.** OpenAI-compatible `internal/llm/client.go` (chat) and `internal/rag/embed.go` (HTTP embeddings, respecting `LLM_EMBED_BASE_URL`).
 
-7. **Ingestion.** `internal/rag/chunk.go` (heading-aware `##`, ~800-token max, ~100 overlap) + `cmd/ingest/main.go` + `internal/store` upserts. Implement the **idempotent reconcile**: content-hash chunk IDs, delete-missing-chunks-per-file, delete-removed-documents-after-walk. Seed a few `corpus/*.md` pages + `corpus/LICENSE` + `corpus/ATTRIBUTION.md`.
+7. **Ingestion.** `internal/rag/chunk.go` (heading-aware `##`, ~800-token max, ~100 overlap) + `cmd/ingest/main.go` + `internal/store` upserts. Implement the **idempotent reconcile**: content-hash chunk IDs, delete-missing-chunks-per-file, delete-removed-documents-after-walk. Sources are the existing `musicwiki/` bundle and the hand-written `guides/` (see docs/superpowers/specs/2026-11-08-corpus-musicwiki-guides-design.md).
    - *Done when:* `go run ./cmd/ingest` twice produces zero duplicate rows.
 
 8. **Retriever.** `internal/rag/retriever.go` — pgvector top-K cosine search.
