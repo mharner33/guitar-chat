@@ -83,3 +83,23 @@ func TestChunkMarkdownKeepsOversizedParagraphWhole(t *testing.T) {
 		t.Fatalf("got %d chunks; want the 5000-char paragraph kept as one chunk", len(got))
 	}
 }
+
+func TestChunkMarkdownNoOverlapOnlyChunk(t *testing.T) {
+	a := strings.Repeat("a", 1500)
+	b := strings.Repeat("b", 1500)
+	c := strings.Repeat("c", 150)    // becomes the overlap seed for part 2
+	big := strings.Repeat("g", 3100) // too big to share a chunk with the 152-char overlap seed
+	body := "## Long\n" + strings.Join([]string{a, b, c, big}, "\n\n")
+
+	got := ChunkMarkdown(body)
+
+	if len(got) != 2 {
+		t.Fatalf("got %d chunks, want 2 (no overlap-only chunk)", len(got))
+	}
+	if got[0].Section != "Long" || got[0].Text != a+"\n\n"+b+"\n\n"+c {
+		t.Errorf("part 1 = section %q, %d chars; want Long with a,b,c", got[0].Section, len(got[0].Text))
+	}
+	if got[1].Section != "Long (part 2)" || got[1].Text != c+"\n\n"+big {
+		t.Errorf("part 2 = section %q, %d chars; want \"Long (part 2)\" with overlap c then big", got[1].Section, len(got[1].Text))
+	}
+}
