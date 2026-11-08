@@ -32,6 +32,10 @@ type Config struct {
 	// mismatch.
 	EmbeddingDimensions int
 
+	// CorpusDirs lists the ingest source directories. A directory whose base
+	// name is "musicwiki" is read as an OKF bundle; any other as guides.
+	CorpusDirs []string
+
 	// Retrieval.
 	RetrievalTopK     int     // chunks retrieved per query, before the score floor
 	RetrievalMinScore float64 // minimum cosine similarity; below this a chunk is dropped
@@ -124,6 +128,22 @@ func Load() (Config, error) {
 		}
 		return v
 	}
+	optList := func(key, def string) []string {
+		v := strings.TrimSpace(os.Getenv(key))
+		if v == "" {
+			v = def
+		}
+		var out []string
+		for _, part := range strings.Split(v, ",") {
+			if p := strings.TrimSpace(part); p != "" {
+				out = append(out, p)
+			}
+		}
+		if len(out) == 0 {
+			errs = append(errs, fmt.Sprintf("%s must list at least one directory", key))
+		}
+		return out
+	}
 	optBool := func(key string, def bool) bool {
 		v := strings.TrimSpace(os.Getenv(key))
 		if v == "" {
@@ -149,6 +169,7 @@ func Load() (Config, error) {
 		LLMEmbedModel:   req("LLM_EMBED_MODEL"),
 
 		EmbeddingDimensions: reqInt("EMBEDDING_DIMENSIONS"),
+		CorpusDirs:          optList("CORPUS_DIRS", "musicwiki,guides"),
 
 		RetrievalTopK:     optInt("RETRIEVAL_TOP_K", 5),
 		RetrievalMinScore: optFloat("RETRIEVAL_MIN_SCORE", 0.5),
