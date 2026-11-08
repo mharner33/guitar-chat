@@ -105,7 +105,7 @@ Licenses: everything is MIT. The root LICENSE covers the Go code, web/, and guid
 4.1 Repository layout
 guitar-chat/
 ├── agent.md                    # instructions for AI coding agents
-├── LICENSE                     # MIT: code and web/
+├── LICENSE                     # MIT: code, web/ and guides/
 ├── docker-compose.yml
 ├── Dockerfile
 ├── .env.example
@@ -274,7 +274,7 @@ Return {answer, sources[], conversation_id, trace_id} — trace_id comes from th
 CREATE EXTENSION IF NOT EXISTS vector;
 
 CREATE TABLE documents (
-    id          TEXT PRIMARY KEY,      -- slug of corpus file
+    id          TEXT PRIMARY KEY,      -- source-prefixed id: wiki:<slug> or guide:<stem>
     title       TEXT NOT NULL,
     updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );

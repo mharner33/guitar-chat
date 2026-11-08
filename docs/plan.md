@@ -23,7 +23,7 @@ Step-by-step build plan, grounded in `docs/design.md` (§4.1 layout, §12 milest
 
 6. **LLM + embedder clients.** OpenAI-compatible `internal/llm/client.go` (chat) and `internal/rag/embed.go` (HTTP embeddings, respecting `LLM_EMBED_BASE_URL`).
 
-7. **Ingestion.** `internal/rag/chunk.go` (heading-aware `##`, ~800-token max, ~100 overlap) + `cmd/ingest/main.go` + `internal/store` upserts. Implement the **idempotent reconcile**: content-hash chunk IDs, delete-missing-chunks-per-file, delete-removed-documents-after-walk. Sources are the existing `musicwiki/` bundle and the hand-written `guides/` (see docs/superpowers/specs/2026-11-08-corpus-musicwiki-guides-design.md).
+7. **Ingestion.** `internal/rag/chunk.go` (heading-aware `##`, ~800-token max, ~100 overlap) + `cmd/ingest/main.go` + `internal/store` upserts. Implement the **idempotent reconcile**: content-hash chunk IDs, delete-missing-chunks-per-document, delete-removed-documents-per-source (by id prefix). Sources are the existing `musicwiki/` bundle and the hand-written `guides/` (see docs/superpowers/specs/2026-11-08-corpus-musicwiki-guides-design.md).
    - *Done when:* `go run ./cmd/ingest` twice produces zero duplicate rows.
 
 8. **Retriever.** `internal/rag/retriever.go` — pgvector top-K cosine search.
