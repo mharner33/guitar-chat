@@ -1,6 +1,7 @@
 package config
 
 import (
+	"slices"
 	"testing"
 )
 
@@ -141,4 +142,36 @@ func withOverride(env map[string]string, key, val string) map[string]string {
 	}
 	out[key] = val
 	return out
+}
+
+func TestCorpusDirs(t *testing.T) {
+	tests := []struct {
+		name    string
+		value   string
+		want    []string
+		wantErr bool
+	}{
+		{name: "unset uses default", value: "", want: []string{"musicwiki", "guides"}},
+		{name: "trims and drops empties", value: " musicwiki , ,guides,", want: []string{"musicwiki", "guides"}},
+		{name: "single dir", value: "guides", want: []string{"guides"}},
+		{name: "only separators is an error", value: " , ,", wantErr: true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			setEnv(t, withOverride(minimalEnv(), "CORPUS_DIRS", tt.value))
+			c, err := Load()
+			if tt.wantErr {
+				if err == nil {
+					t.Fatal("Load() succeeded, want error")
+				}
+				return
+			}
+			if err != nil {
+				t.Fatalf("Load() error: %v", err)
+			}
+			if !slices.Equal(c.CorpusDirs, tt.want) {
+				t.Errorf("CorpusDirs = %q, want %q", c.CorpusDirs, tt.want)
+			}
+		})
+	}
 }

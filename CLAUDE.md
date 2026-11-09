@@ -11,7 +11,7 @@ This repo has two authoritative documents. Read them before making any change �
 
 ## Project state
 
-This is a **greenfield project**: the design is complete but no Go source has been written yet. `go.mod` and `go.sum` exist with dependencies resolved (notably the experimental `github.com/DataDog/dd-trace-go/v2` llmobs SDK, pinned at `v2.10.1`); the `cmd/`, `internal/`, `web/`, `migrations/`, `corpus/`, and `evals/` trees described below do not exist yet and are to be built per `docs/design.md §4.1`. When implementing, follow the layout and milestones in the design doc rather than inventing new structure.
+Work is in progress per `docs/plan.md`. The Milestone 1 server/chat stub and Milestone 2 corpus ingestion exist: `internal/corpus` (musicwiki bundle + guides readers, `Load`), `internal/rag` (chunker, embedder), `internal/store` corpus sync, and `cmd/ingest`, plus `musicwiki/`, `guides/`, `migrations/`, `web/`. Still to be built per `docs/design.md §4.1` and `docs/plan.md`: the retriever, the answer pipeline, observability (`internal/observe`), and the eval harness (`cmd/eval`, `evals/`). `go.mod` and `go.sum` have dependencies resolved (notably the experimental `github.com/DataDog/dd-trace-go/v2` llmobs SDK, pinned at `v2.10.1`). When implementing, follow the layout and milestones in the design doc rather than inventing new structure.
 
 Note: `go.mod` declares `go 1.26.2`. (`agent.md` text says "Go 1.23+" as a floor.)
 
@@ -70,7 +70,7 @@ The llmobs SDK is **experimental** (may change/break without notice, outside dd-
 
 ### Ingestion is idempotent and reconciling
 
-`cmd/ingest` chunk IDs are content hashes (`sha256(doc_id + section + text)`), chunking is heading-aware (`##` splits, ~800 token max, ~100 token overlap). For each corpus file: upsert the doc + current chunks, then delete that doc's chunk rows whose hashes weren't in the file just read. After the walk, delete documents whose slugs are gone from `corpus/`. Re-running must never duplicate rows, and a degraded/removed file must not leave stale chunks searchable (this is what makes the "groundedness drops after a degraded re-ingest" demo step true). Both `api` and `ingest` refuse to start if `EMBEDDING_DIMENSIONS` ≠ the `vector(N)` column width.
+`cmd/ingest` chunk IDs are content hashes (`sha256(doc_id + section + text)`), chunking is heading-aware (`##` splits, ~800 token max, ~100 token overlap). Sources are `musicwiki/` (generated OKF bundle, YAML frontmatter flattened to prose in `internal/corpus`) and `guides/` (hand-written), listed in `CORPUS_DIRS`. Document ids are `wiki:<slug>` / `guide:<stem>`. All sources are loaded and validated before any write. For each document: upsert it, insert new chunks, delete its chunk rows whose hashes weren't produced this run. After each source, delete documents with that source's prefix that weren't seen — reconcile never crosses sources. `musicwiki/` is generated: never hand-edit it. Re-running must never duplicate rows, and a degraded/removed file must not leave stale chunks searchable (this is what makes the "groundedness drops after a degraded re-ingest" demo step true). Both `api` and `ingest` refuse to start if `EMBEDDING_DIMENSIONS` ≠ the `vector(N)` column width.
 
 ## Conventions that aren't obvious
 
@@ -84,5 +84,5 @@ The llmobs SDK is **experimental** (may change/break without notice, outside dd-
 
 - **Demo scope** (per `docs/design.md §1`): no auth, no Kubernetes, no multi-agent orchestration, no streaming in v1. If a request pulls toward these, stop and propose a design change rather than silently expanding scope.
 - Never bypass RAG (no ungrounded LLM answers) and never skip instrumentation — both are the demo's core purpose.
-- Licensing: root `LICENSE` is MIT and covers the Go code and `web/`. Everything under `corpus/` is CC BY-SA 4.0 (including hand-written pages). Keep `corpus/LICENSE` and `corpus/ATTRIBUTION.md` accurate when adding or adapting Open Music Theory material.
+- Licensing: everything is MIT — root `LICENSE` covers code, `web/` and `guides/`; `musicwiki/LICENSE` covers the bundle. Do not add CC BY-SA or other share-alike text to `guides/`; adapted material needs its own folder, LICENSE and attribution.
 - When the llmobs SDK surprises you, fix the `internal/observe` wrappers, add a regression test, and note the workaround in `agent.md`'s Observability Rules section.

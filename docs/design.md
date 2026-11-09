@@ -97,24 +97,24 @@ go vet, staticcheck, go test ./...
 Fast, standard.
 
 
-Corpus source: seed content from openly licensed music-theory references (for example Open Music Theory) plus hand-written guitar-specific pages (CAGED system, chord construction, modes on the fretboard). Ingestion is a separate command so the corpus can evolve without redeploying.
+Corpus source: two folders. musicwiki/ is a generated Open Knowledge Format bundle (intervals, scales, triads, chords, keys — one Markdown file per concept, structured YAML frontmatter plus a short prose body); it is produced by a separate generator repo and replaced wholesale, never hand-edited here. guides/ holds hand-written explanation pages (why major and minor sound different, modes and their chords, CAGED, chord construction, …) that answer the "why" questions the wiki's reference pages cannot. Ingestion is a separate command so the corpus can evolve without redeploying.
 
-Licenses: root LICENSE is MIT and covers the Go code and web/. Everything under corpus/ is CC BY-SA 4.0, including hand-written pages, because those files share a directory with adapted Open Music Theory text. corpus/LICENSE is the BY-SA 4.0 text. corpus/ATTRIBUTION.md credits Open Music Theory with title, authors, source URL, the BY-SA 4.0 link, and a statement that the pages were excerpted and adapted. Keep that file current when corpus text changes.
+Licenses: everything is MIT. The root LICENSE covers the Go code, web/, and guides/; musicwiki/LICENSE covers the generated bundle. Nothing in the repo is adapted from CC BY-SA material. If such material is ever adapted, it goes in its own folder with its own LICENSE and attribution file — never mixed into guides/.
 
 4. Backend Design
 4.1 Repository layout
 guitar-chat/
 ├── agent.md                    # instructions for AI coding agents
-├── LICENSE                     # MIT: code and web/
+├── LICENSE                     # MIT: code, web/ and guides/
 ├── docker-compose.yml
 ├── Dockerfile
 ├── .env.example
 ├── docs/design.md              # this document
-├── corpus/                     # markdown knowledge base (one topic per file)
-│   ├── LICENSE                 # CC BY-SA 4.0
-│   ├── ATTRIBUTION.md          # Open Music Theory credit
-│   ├── modes.md
-│   ├── chord-construction.md
+├── musicwiki/                  # generated OKF bundle (MIT, own LICENSE) — read-only here
+│   ├── intervals/ scales/ triads/ chords/ keys/
+│   └── index.md log.md …       # not ingested
+├── guides/                     # hand-written explanation pages (MIT)
+│   ├── modes-and-their-chords.md
 │   └── ...
 ├── cmd/
 │   ├── api/main.go             # HTTP server
@@ -131,6 +131,7 @@ guitar-chat/
 │   │   ├── retriever.go        # Retriever interface + pgvector impl
 │   │   ├── embed.go            # Embedder interface + HTTP impl
 │   │   └── prompt.go           # prompt templates + assembly
+│   ├── corpus/                 # source readers: OKF flattener + guides reader
 │   ├── llm/client.go           # LLMClient interface + OpenAI-compatible impl
 │   ├── store/store.go          # pgx queries (docs, chunks, convos, feedback)
 │   ├── observe/llmobs.go      # dd-trace-go llmobs setup + span helpers
@@ -205,6 +206,9 @@ text-embedding-3-small
 EMBEDDING_DIMENSIONS
 Vector width. Must match vector(N) in the applied migration. api and ingest refuse to start when they differ.
 1536
+CORPUS_DIRS
+Comma-separated corpus source directories. A directory named musicwiki uses the OKF reader; any other uses the guides reader. At most one of each.
+musicwiki,guides
 RETRIEVAL_TOP_K
 Chunks retrieved per query, before the score floor
 5
@@ -241,12 +245,12 @@ The llmobs SDK's global setup (start/stop entry point, agentless vs Agent-based 
 
 5. RAG Pipeline
 5.1 Ingestion (cmd/ingest)
-Read every corpus/*.md file. Skip corpus/LICENSE and corpus/ATTRIBUTION.md.
+Read every source in CORPUS_DIRS before writing anything. musicwiki: every *.md under intervals/ scales/ triads/ chords/ keys/ except index.md; frontmatter is flattened into prose chunks (overview, one per scale pattern, one per chord voicing, one per key progression), each starting with the node title. guides: every *.md in the folder, chunked by the heading-aware splitter below. Document ids carry a source prefix: wiki:<slug>, guide:<filename stem>. Ingest refuses to run if a source directory is missing or yields no documents, or if any file fails validation.
 Chunk with heading-aware splitting: split on ## headings, then sub-split any block exceeding ~800 tokens at paragraph boundaries, keeping ~100 tokens of overlap. Each chunk carries {doc_title, section, text}.
 Embed chunk texts in batches of 64 via Embedder.
 Upsert the document and its chunks. Chunk ids are sha256(doc_id + section + text), so re-running does not duplicate identical rows.
 For each file, delete chunk rows of that document whose ids are not in the set just written.
-After the corpus walk, delete documents whose slugs are no longer in corpus/, and their chunks. Re-ingesting a degraded file or removing a file leaves only the current corpus searchable. This is what makes demo step 6 (groundedness drops after a degraded re-ingest) true.
+After each source is written, delete documents with that source's id prefix that were not in it, and their chunks. Reconcile never crosses sources: re-ingesting guides cannot delete wiki rows. Re-ingesting a degraded file or removing a file leaves only the current corpus searchable. This is what makes demo step 6 (groundedness drops after a degraded re-ingest) true. Unchanged chunks keep their content-hash ids and are not re-embedded. Changing the embedding model (LLM_EMBED_MODEL) requires clearing stored chunks first (`TRUNCATE chunks;`), because chunk ids do not include the model and unchanged ids are not re-embedded.
 Run manually: go run ./cmd/ingest. Also runnable inside the compose stack via a one-shot service. Refuse to run when EMBEDDING_DIMENSIONS does not match the chunks.embedding column width.
 5.2 Answer path (POST /api/chat)
 Validate question (non-empty, ≤ 2000 chars).
@@ -270,7 +274,7 @@ Return {answer, sources[], conversation_id, trace_id} — trace_id comes from th
 CREATE EXTENSION IF NOT EXISTS vector;
 
 CREATE TABLE documents (
-    id          TEXT PRIMARY KEY,      -- slug of corpus file
+    id          TEXT PRIMARY KEY,      -- source-prefixed id: wiki:<slug> or guide:<stem>
     title       TEXT NOT NULL,
     updated_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
@@ -416,7 +420,7 @@ Dashboard: request rate, p95 answer latency, LLM token spend, judge score distri
 Monitors: groundedness score < 0.7 over 30 min; thumbs-down ratio > 20%; LLM error rate; empty-retrieval rate.
 Logs: Go logs via slog JSON, correlated to traces via the span's APMTraceID(); eval failures and low-confidence answers logged with the LLMObs trace id.
 9.5 Demo storyline
-The point of the app is the demo: (1) ask questions in the UI, (2) open the trace in US1 Agent Observability and walk the span tree — question, query rewrite on a follow-up, embedding, retrieval with scores, LLM answer with token counts, (3) show judge scores attached to the trace, (4) thumbs-down a bad answer and see the feedback land on that trace, (5) run the offline harness and show the single eval_runs row plus score trends, (6) re-ingest a degraded corpus (old chunks for that file are deleted) and watch groundedness scores drop — proving the evals catch regressions. An off-corpus question shows the canned "I don't have enough context" answer, a trace with rejected retrieval scores, and no generate.answer span.
+The point of the app is the demo: (1) ask questions in the UI, (2) open the trace in US1 Agent Observability and walk the span tree — question, query rewrite on a follow-up, embedding, retrieval with scores, LLM answer with token counts, (3) show judge scores attached to the trace, (4) thumbs-down a bad answer and see the feedback land on that trace, (5) run the offline harness and show the single eval_runs row plus score trends, (6) re-ingest a degraded guide (e.g. a wrong guides/modes-and-their-chords.md; its old chunks are deleted) and watch groundedness scores drop — proving the evals catch regressions. An off-corpus question shows the canned "I don't have enough context" answer, a trace with rejected retrieval scores, and no generate.answer span.
 
 10. Deployment
 docker compose up:
@@ -482,4 +486,3 @@ Evaluations in Agent Observability
 Datadog blog: OTel GenAI semantic conventions support
 OpenTelemetry GenAI semantic conventions
 pgvector
-Open Music Theory (corpus candidate, CC BY-SA)

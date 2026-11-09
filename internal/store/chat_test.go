@@ -22,7 +22,7 @@ func TestEnsureConversationAndAddMessage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("open: %v", err)
 	}
-	defer st.Close()
+	t.Cleanup(st.Close) // registered first so it runs after the row cleanup below
 
 	// Mint a new conversation.
 	id, err := st.EnsureConversation(ctx, "")
@@ -35,8 +35,14 @@ func TestEnsureConversationAndAddMessage(t *testing.T) {
 
 	// Clean up whatever we insert, regardless of outcome.
 	t.Cleanup(func() {
-		_, _ = st.Pool().Exec(context.Background(), `DELETE FROM messages WHERE conversation_id = $1`, id)
-		_, _ = st.Pool().Exec(context.Background(), `DELETE FROM conversations WHERE id = $1`, id)
+		for _, q := range []string{
+			`DELETE FROM messages WHERE conversation_id = $1`,
+			`DELETE FROM conversations WHERE id = $1`,
+		} {
+			if _, err := st.Pool().Exec(context.Background(), q, id); err != nil {
+				t.Errorf("cleanup: %v", err)
+			}
+		}
 	})
 
 	// Idempotent for an existing id.
