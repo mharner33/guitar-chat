@@ -11,7 +11,7 @@ This repo has two authoritative documents. Read them before making any change �
 
 ## Project state
 
-This is a **greenfield project**: the design is complete but no Go source has been written yet. `go.mod` and `go.sum` exist with dependencies resolved (notably the experimental `github.com/DataDog/dd-trace-go/v2` llmobs SDK, pinned at `v2.10.1`); the `cmd/`, `internal/`, `web/`, `migrations/`, `guides/`, and `evals/` trees described below do not exist yet (`musicwiki/` already exists as a generated bundle) and are to be built per `docs/design.md §4.1`. When implementing, follow the layout and milestones in the design doc rather than inventing new structure.
+Work is in progress per `docs/plan.md`. The Milestone 1 server/chat stub and Milestone 2 corpus ingestion exist: `internal/corpus` (musicwiki bundle + guides readers, `Load`), `internal/rag` (chunker, embedder), `internal/store` corpus sync, and `cmd/ingest`, plus `musicwiki/`, `guides/`, `migrations/`, `web/`. Still to be built per `docs/design.md §4.1` and `docs/plan.md`: the retriever, the answer pipeline, observability (`internal/observe`), and the eval harness (`cmd/eval`, `evals/`). `go.mod` and `go.sum` have dependencies resolved (notably the experimental `github.com/DataDog/dd-trace-go/v2` llmobs SDK, pinned at `v2.10.1`). When implementing, follow the layout and milestones in the design doc rather than inventing new structure.
 
 Note: `go.mod` declares `go 1.26.2`. (`agent.md` text says "Go 1.23+" as a floor.)
 
