@@ -39,6 +39,11 @@ type docPlan struct {
 // only chunks whose ids are new (in batches across documents), and only then
 // writes — so an embedding failure leaves that source untouched. Finally it
 // deletes the source's documents that were not seen.
+//
+// Sources are processed in order and each commits independently: if a later
+// source fails, earlier sources stay synced and reconciled. A SyncDocument
+// failure mid-source leaves that source's earlier documents synced and its
+// reconcile skipped (no rows lost; a re-run converges).
 func ingest(ctx context.Context, st docStore, emb rag.Embedder, sources []corpus.Source) (stats, error) {
 	var s stats
 	for _, src := range sources {
