@@ -74,7 +74,7 @@ Because the strings are tuned regularly, each interval has a fixed shape that yo
 - **Minor third (3 semitones):** one string up, two frets back. From A at string 6 fret 5, the minor third C is at string 5 fret 3.
 - **Perfect fourth (5 semitones):** one string up, same fret. From A at string 6 fret 5, D is at string 5 fret 5.
 - **Perfect fifth (7 semitones):** one string up, two frets higher. From G at string 6 fret 3, D is at string 5 fret 5.
-- **Octave (12 semitones):** two strings up, two frets higher, as above.
+- **Octave (12 semitones):** two strings up, two frets higher — three frets higher when the jump crosses the G–B pair (from string 4 or 3).
 
 ## The G–B exception
 
@@ -84,5 +84,6 @@ Every shape above assumes a fourth between neighbouring strings. Between string 
 - Minor third across G–B: one string up, one fret back.
 - Perfect fourth across G–B: one string up, one fret higher.
 - Perfect fifth across G–B: one string up, three frets higher.
+- Octave across G–B (from string 4 or 3): two strings up, three frets higher. From D at string 4 fret 0, the octave D is at string 2 fret 3.
 
 Once you see that the B string is "one fret out of line", chord and scale shapes that look irregular start to make sense: they are the same intervals, adjusted for the tuning.
