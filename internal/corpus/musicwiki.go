@@ -14,18 +14,20 @@ var wikiFolders = []string{"intervals", "scales", "triads", "chords", "keys"}
 
 // ReadMusicWiki reads and flattens every concept node in an OKF bundle. All
 // nodes are parsed before any is flattened, so relationship slugs resolve to
-// titles across the whole bundle.
+// titles across the whole bundle. A missing or empty concept folder is an
+// error: a partial bundle must not reconcile the absent documents away.
 func ReadMusicWiki(dir string) ([]Document, error) {
 	var nodes []node
 	titles := map[string]string{}
 	for _, sub := range wikiFolders {
 		entries, err := os.ReadDir(filepath.Join(dir, sub))
 		if errors.Is(err, fs.ErrNotExist) {
-			continue
+			return nil, fmt.Errorf("musicwiki bundle %q: concept folder %q is missing", dir, sub)
 		}
 		if err != nil {
 			return nil, fmt.Errorf("read %s: %w", filepath.Join(dir, sub), err)
 		}
+		found := 0
 		for _, e := range entries {
 			if e.IsDir() || filepath.Ext(e.Name()) != ".md" || e.Name() == "index.md" {
 				continue
@@ -44,6 +46,10 @@ func ReadMusicWiki(dir string) ([]Document, error) {
 			}
 			titles[n.Slug] = n.Title
 			nodes = append(nodes, n)
+			found++
+		}
+		if found == 0 {
+			return nil, fmt.Errorf("musicwiki bundle %q: concept folder %q has no concept nodes", dir, sub)
 		}
 	}
 

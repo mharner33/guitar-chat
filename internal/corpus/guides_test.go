@@ -40,7 +40,7 @@ func TestReadGuidesErrors(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			dir := writeTree(t, map[string]string{"g.md": tt.content})
-			_, err := ReadGuides(dir, map[string]bool{})
+			_, err := ReadGuides(dir, map[string]bool{"/scales/other": true})
 			if err == nil || !strings.Contains(err.Error(), tt.wantErr) || !strings.Contains(err.Error(), "g.md") {
 				t.Fatalf("err = %v, want containing %q and the file name", err, tt.wantErr)
 			}

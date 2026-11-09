@@ -7,12 +7,11 @@ import (
 )
 
 func TestLoad(t *testing.T) {
-	root := writeTree(t, map[string]string{
-		"musicwiki/intervals/u.md": "---\ntype: interval\nslug: /intervals/u\ntitle: U\ntheory: {}\n---\n",
-		"guides/g.md":              "---\ntitle: G\nrelated: [/intervals/u]\n---\n\n## A\nB.\n",
-		"empty/.keep":              "",
-		"notadir":                  "file",
-	})
+	root := writeTree(t, merge(minimalBundle("musicwiki/"), map[string]string{
+		"guides/g.md": "---\ntitle: G\nrelated: [/intervals/i]\n---\n\n## A\nB.\n",
+		"empty/.keep": "",
+		"notadir":     "file",
+	}))
 	wiki := filepath.Join(root, "musicwiki")
 	guides := filepath.Join(root, "guides")
 
@@ -42,7 +41,7 @@ func TestLoad(t *testing.T) {
 		{"empty guides dir", []string{wiki, filepath.Join(root, "empty")}, "no documents"},
 		{"two guide dirs share a prefix", []string{guides, filepath.Join(root, "empty")}, "at most one"},
 		{"two wiki dirs", []string{wiki, wiki}, "at most one"},
-		{"guide related needs the wiki", []string{guides}, `related slug "/intervals/u"`},
+		{"guide related needs the wiki", []string{guides}, `related slug "/intervals/i" cannot be checked: CORPUS_DIRS has no musicwiki source`},
 	}
 	for _, tt := range errs {
 		t.Run(tt.name, func(t *testing.T) {

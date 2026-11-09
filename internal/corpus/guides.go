@@ -58,6 +58,9 @@ func readGuide(path string, wikiSlugs map[string]bool) (Document, error) {
 		return Document{}, fmt.Errorf("missing required field %q", "title")
 	}
 	for _, s := range g.Related {
+		if len(wikiSlugs) == 0 {
+			return Document{}, fmt.Errorf("related slug %q cannot be checked: CORPUS_DIRS has no musicwiki source", s)
+		}
 		if !wikiSlugs[s] {
 			return Document{}, fmt.Errorf("related slug %q is not a musicwiki node", s)
 		}

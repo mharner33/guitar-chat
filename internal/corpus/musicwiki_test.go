@@ -98,6 +98,60 @@ func TestMinorPentatonicMatchesLessonFixtures(t *testing.T) {
 	}
 }
 
+// minimalBundle returns one minimal valid node per concept folder under the
+// path prefix root (use "" for the bundle root).
+func minimalBundle(root string) map[string]string {
+	node := func(typ, folder, name string) (string, string) {
+		return root + folder + "/" + name + ".md",
+			"---\ntype: " + typ + "\nslug: /" + folder + "/" + name + "\ntitle: " + name + "\ntheory: {}\n---\n"
+	}
+	files := map[string]string{}
+	for _, n := range [][3]string{
+		{"interval", "intervals", "i"}, {"scale", "scales", "s"}, {"Concept", "triads", "t"},
+		{"Concept", "chords", "c"}, {"key", "keys", "k"},
+	} {
+		p, c := node(n[0], n[1], n[2])
+		files[p] = c
+	}
+	files[root+"keys/k.md"] = "---\ntype: key\nslug: /keys/k\ntitle: k\n---\n"
+	return files
+}
+
+func merge(maps ...map[string]string) map[string]string {
+	out := map[string]string{}
+	for _, m := range maps {
+		for k, v := range m {
+			out[k] = v
+		}
+	}
+	return out
+}
+
+func TestReadMusicWikiIncompleteBundle(t *testing.T) {
+	full := minimalBundle("")
+	tests := []struct {
+		name    string
+		mutate  func(map[string]string)
+		wantErr string
+	}{
+		{"missing folder", func(m map[string]string) { delete(m, "scales/s.md") }, `concept folder "scales" is missing`},
+		{"folder with only index.md", func(m map[string]string) {
+			delete(m, "scales/s.md")
+			m["scales/index.md"] = "---\ntype: Index\n---\n"
+		}, `concept folder "scales" has no concept nodes`},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			files := merge(full)
+			tt.mutate(files)
+			_, err := ReadMusicWiki(writeTree(t, files))
+			if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
+				t.Fatalf("err = %v, want containing %q", err, tt.wantErr)
+			}
+		})
+	}
+}
+
 func TestReadMusicWikiErrors(t *testing.T) {
 	tests := []struct {
 		name    string
@@ -129,7 +183,7 @@ func TestReadMusicWikiErrors(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			dir := writeTree(t, tt.files)
+			dir := writeTree(t, merge(minimalBundle(""), tt.files))
 			_, err := ReadMusicWiki(dir)
 			if err == nil || !strings.Contains(err.Error(), tt.wantErr) {
 				t.Fatalf("err = %v, want containing %q", err, tt.wantErr)
@@ -139,19 +193,23 @@ func TestReadMusicWikiErrors(t *testing.T) {
 }
 
 func TestReadMusicWikiSkipsIndexAndRootFiles(t *testing.T) {
-	dir := writeTree(t, map[string]string{
+	dir := writeTree(t, merge(minimalBundle(""), map[string]string{
 		"index.md":           "---\ntype: Index\n---\n",
 		"log.md":             "---\ntype: Log\n---\n",
 		"README.md":          "# readme",
 		"intervals/index.md": "---\ntype: Index\n---\n",
-		"intervals/u.md":     "---\ntype: interval\nslug: /intervals/u\ntitle: U\ntheory: {}\n---\n",
-	})
+	}))
 	docs, err := ReadMusicWiki(dir)
 	if err != nil {
 		t.Fatalf("ReadMusicWiki: %v", err)
 	}
-	if len(docs) != 1 || docs[0].ID != "wiki:/intervals/u" {
-		t.Fatalf("docs = %+v, want only wiki:/intervals/u", docs)
+	if len(docs) != 5 {
+		t.Fatalf("got %d docs, want the 5 minimal nodes only: %+v", len(docs), docs)
+	}
+	for _, d := range docs {
+		if strings.Contains(d.ID, "index") || strings.Contains(d.ID, "log") || strings.Contains(d.ID, "README") {
+			t.Errorf("skipped file leaked into docs: %s", d.ID)
+		}
 	}
 }
 
