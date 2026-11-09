@@ -250,7 +250,7 @@ Chunk with heading-aware splitting: split on ## headings, then sub-split any blo
 Embed chunk texts in batches of 64 via Embedder.
 Upsert the document and its chunks. Chunk ids are sha256(doc_id + section + text), so re-running does not duplicate identical rows.
 For each file, delete chunk rows of that document whose ids are not in the set just written.
-After each source is written, delete documents with that source's id prefix that were not in it, and their chunks. Reconcile never crosses sources: re-ingesting guides cannot delete wiki rows. Re-ingesting a degraded file or removing a file leaves only the current corpus searchable. This is what makes demo step 6 (groundedness drops after a degraded re-ingest) true. Unchanged chunks keep their content-hash ids and are not re-embedded.
+After each source is written, delete documents with that source's id prefix that were not in it, and their chunks. Reconcile never crosses sources: re-ingesting guides cannot delete wiki rows. Re-ingesting a degraded file or removing a file leaves only the current corpus searchable. This is what makes demo step 6 (groundedness drops after a degraded re-ingest) true. Unchanged chunks keep their content-hash ids and are not re-embedded. Changing the embedding model (LLM_EMBED_MODEL) requires clearing stored chunks first (`TRUNCATE chunks;`), because chunk ids do not include the model and unchanged ids are not re-embedded.
 Run manually: go run ./cmd/ingest. Also runnable inside the compose stack via a one-shot service. Refuse to run when EMBEDDING_DIMENSIONS does not match the chunks.embedding column width.
 5.2 Answer path (POST /api/chat)
 Validate question (non-empty, ≤ 2000 chars).
