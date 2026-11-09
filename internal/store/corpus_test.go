@@ -41,13 +41,15 @@ func TestSyncAndReconcile(t *testing.T) {
 	if err != nil {
 		t.Fatalf("open: %v", err)
 	}
-	defer st.Close()
+	t.Cleanup(st.Close) // registered first so it runs after the row cleanup below
 
 	// Unique prefixes isolate this run from real data and other runs.
 	pa, pb := testPrefix(t), testPrefix(t)
 	t.Cleanup(func() {
 		for _, p := range []string{pa, pb} {
-			_, _ = st.Pool().Exec(context.Background(), `DELETE FROM documents WHERE starts_with(id, $1)`, p)
+			if _, err := st.Pool().Exec(context.Background(), `DELETE FROM documents WHERE starts_with(id, $1)`, p); err != nil {
+				t.Errorf("cleanup %s: %v", p, err)
+			}
 		}
 	})
 	vec := make([]float32, 1536)
